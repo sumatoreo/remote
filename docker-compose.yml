@@ -1,0 +1,63 @@
+version: '3.5'
+
+services:
+
+  #
+  # Приложение php-fpm с возможностью входа в bash
+  # docker-compose exec app bash
+  #
+  app:
+    build:
+      args:
+        - USER=sammy
+        - UID=1000
+        - DEVELOP=true
+      context: ./app
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    depends_on:
+      - mongo
+    volumes:
+      - ./mobile-backend2020:/var/www/html:delegated
+      - ./xhgui:/var/www/xhgui:delegated
+      - ./composer:/home/sammy/.composer
+
+  #
+  # Nginx контейнер, собирается напрямую из образа
+  #
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - app
+    volumes:
+      - ./mobile-backend2020:/var/www/html:delegated
+      - ./xhgui:/var/www/xhgui:delegated
+      - ./nginx/log:/var/log/nginx:delegated
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''  
+
+  #
+  # MongoDB
+  #
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - ./mongo/data:/data/db:delegated
+    environment:
+      MONGO_INITDB_DATABASE: xhprof
+    command: --storageEngine=wiredTiger
+
+networks:
+  default:
+    external: 
+      name: br0  

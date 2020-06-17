@@ -1,0 +1,5 @@
+/composer.lock
+/composer.phar
+/tags
+/vendor/
+/docker-compose.override.yml

@@ -1,0 +1,14 @@
+# Mongo
+/mongo/data
+
+# Nginx
+/nginx/log
+
+# Composer
+/composer
+
+# Code
+/mobile-backend2020
+
+# Common
+.DS_Store
