@@ -9,8 +9,8 @@ services:
   app:
     build:
       args:
-        - USER=sammy
-        - UID=1000
+        # - USER=sammy
+        # - UID=1000
         - DEVELOP=true
       context: ./app
     container_name: app

@@ -2,8 +2,8 @@ FROM php:7.4-fpm
 
 # Описание про MSSQL драйвер https://laravel-news.com/install-microsoft-sql-drivers-php-7-docker
 # Arguments defined in docker-compose.yml
-ARG USER
-ARG UID
+# ARG USER
+# ARG UID
 
 RUN apt-get update; \
     apt-get upgrade -y; \
@@ -72,7 +72,7 @@ RUN docker-php-ext-install pdo pdo_mysql soap; \
 
 # xDebug
 RUN pecl install xdebug; \
-    docker-php-ext-enable xdebug
+    docker-php-ext-enable xdebug;
 
 # Xhprof
 RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
@@ -86,7 +86,7 @@ RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extens
         && make install \
     ); \
     rm -r xhprof; \
-    rm /tmp/xhprof.tar.gz;
+    rm /tmp/xhprof.tar.gz
 
 # MongoDB
 RUN pecl install mongodb; \
@@ -101,13 +101,13 @@ RUN npm install apidoc -g
 COPY ./conf.d $PHP_INI_DIR/conf.d
 
 # Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $UID -d /home/$USER $USER
-RUN mkdir -p /home/$USER/.composer; \
-    chown -R $USER:$USER /home/$USER
+# RUN useradd -G www-data,root -u $UID -d /home/$USER $USER
+# RUN mkdir -p /home/$USER/.composer; \
+#     chown -R $USER:$USER /home/$USER
 
 WORKDIR /var/www/html
 
-USER $USER
+# USER $USER
 
 EXPOSE 9000	
 
