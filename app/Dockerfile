@@ -72,7 +72,7 @@ RUN docker-php-ext-install pdo pdo_mysql soap; \
 
 # xDebug
 RUN pecl install xdebug; \
-    docker-php-ext-enable xdebug;
+    docker-php-ext-enable xdebug
 
 # Xhprof
 RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
