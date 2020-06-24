@@ -18,7 +18,7 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./mobile-backend2020:/var/www/html:delegated
+      - ${APP_CODE}:/var/www/html:delegated
       - ./xhgui:/var/www/xhgui:delegated
       - ./composer:/home/sammy/.composer
 
@@ -32,7 +32,7 @@ services:
     depends_on:
       - app
     volumes:
-      - ./mobile-backend2020:/var/www/html:delegated
+      - ${APP_CODE}:/var/www/html:delegated
       - ./xhgui:/var/www/xhgui:delegated
       - ./nginx/log:/var/log/nginx:delegated
       - ./nginx/conf.d:/etc/nginx/conf.d/
@@ -47,12 +47,35 @@ services:
   #
   mongo:
     image: mongo
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./mongo/data:/data/db:delegated
     environment:
       MONGO_INITDB_DATABASE: xhprof
     command: --storageEngine=wiredTiger
+
+  #
+  # Supervisor Worker
+  #
+  worker:
+    build: ./worker
+    volumes:
+      - ${APP_CODE}:/var/www/html:delegated
+      - ./worker/supervisord.d:/etc/supervisord.d
+      - ./worker/log:/var/log:cached
+    depends_on:
+      - app
+
+  #
+  # Redis
+  #
+  redis:
+    image: redis
+    restart: unless-stopped
+    depends_on:
+      - app
+    volumes:
+      - ./redis/data:/data
 
 networks:
   default:

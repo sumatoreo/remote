@@ -7,6 +7,12 @@
 # Composer
 /composer
 
+# Worker
+/worker/log
+
+# Redis
+/redis
+
 # Code
 /mobile-backend2020
 /Backend
