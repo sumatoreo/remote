@@ -47,7 +47,7 @@ RUN if [ ${DEVELOP} = true ]; then \
         mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
     fi
 
-# Ext Zip
+# Zip
 RUN docker-php-ext-install zip
 
 # Redis

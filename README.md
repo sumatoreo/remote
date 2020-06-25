@@ -15,6 +15,8 @@ docker-compose exec app bash
 Описание настройки с phpStorm
 https://blog.denisbondar.com/post/phpstorm_docker_xdebug
 
+!!! xDebug по умолчанию включен, рекомендую отключать всегда, включать только при необходимости
+
 ## Использование xHProf
 
 Проверить права
@@ -42,6 +44,10 @@ http://gui.loc
 # Common
 
 Если работа идет с проброшенными портами, то для доступа к портам хоста нужно вместо `127.0.0.1` -> `host.docker.internal`
+В `.env` нужно прописать 
+```
+REDIS_HOST=redis
+```
 
 ## Nginx
 
