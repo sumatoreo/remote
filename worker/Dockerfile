@@ -17,10 +17,10 @@ RUN apt-get update; \
         openssl \
        	imagemagick \
     	libmagickwand-dev \
-        libzip-dev \
+        libxml2-dev \
         zip \
-    	unzip \
-    	libxml2-dev \
+        unzip \
+        libzip-dev \
         curl; \
     sed -i 's,^\(MinProtocol[ ]*=\).*,\1'TLSv1.0',g' /etc/ssl/openssl.cnf; \
     sed -i 's,^\(CipherString[ ]*=\).*,\1'DEFAULT@SECLEVEL=1',g' /etc/ssl/openssl.cnf; \
@@ -67,7 +67,8 @@ RUN docker-php-ext-install pdo pdo_mysql soap; \
     pecl install sqlsrv pdo_sqlsrv; \
     docker-php-ext-enable sqlsrv pdo_sqlsrv
 
-RUN mkdir -p /var/www/html
+RUN mkdir -p /var/www/html; \
+    mkdir -p /var/log/supervisor
 
 COPY ./conf.d $PHP_INI_DIR/conf.d
 

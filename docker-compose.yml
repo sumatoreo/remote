@@ -17,6 +17,7 @@ services:
     working_dir: /var/www/html
     depends_on:
       - mongo
+      - redis
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
       - ./xhgui:/var/www/xhgui:delegated
@@ -62,9 +63,9 @@ services:
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
       - ./worker/supervisord.d:/etc/supervisord.d
-      - ./worker/log:/var/log:cached
+      - ./worker/log:/var/log/supervisor/:cached
     depends_on:
-      - app
+      - redis
 
   #
   # Redis
@@ -72,8 +73,6 @@ services:
   redis:
     image: redis
     restart: unless-stopped
-    depends_on:
-      - app
     volumes:
       - ./redis/data:/data
 
