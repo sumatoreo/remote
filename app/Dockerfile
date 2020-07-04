@@ -74,38 +74,35 @@ RUN docker-php-ext-install tokenizer
 RUN docker-php-ext-install opcache
 
 # xDebug
-RUN pecl install xdebug; \
-    docker-php-ext-enable xdebug
+# RUN pecl install xdebug; \
+#     docker-php-ext-enable xdebug
 
 # Xhprof
-RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
-    mkdir -p xhprof; \
-    tar -C xhprof -zxvf /tmp/xhprof.tar.gz --strip 1; \
-    ( \
-        cd xhprof \
-        && phpize \
-        && ./configure \
-        && make \
-        && make install \
-    ); \
-    rm -r xhprof; \
-    rm /tmp/xhprof.tar.gz
+# RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
+#     mkdir -p xhprof; \
+#     tar -C xhprof -zxvf /tmp/xhprof.tar.gz --strip 1; \
+#     ( \
+#         cd xhprof \
+#         && phpize \
+#         && ./configure \
+#         && make \
+#         && make install \
+#     ); \
+#     rm -r xhprof; \
+#     rm /tmp/xhprof.tar.gz
 
 # MongoDB
 RUN pecl install mongodb; \
     docker-php-ext-enable mongodb
 
-# Install composer and add its bin to the PATH.
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install apidoc
 RUN npm install apidoc -g
 
 COPY ./conf.d $PHP_INI_DIR/conf.d
 
-# Create system user to run Composer and Artisan Commands
+# Create system user to run Artisan Commands
 # RUN useradd -G www-data,root -u $UID -d /home/$USER $USER
-# RUN mkdir -p /home/$USER/.composer; \
 #     chown -R $USER:$USER /home/$USER
 
 WORKDIR /var/www/html

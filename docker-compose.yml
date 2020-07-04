@@ -20,8 +20,16 @@ services:
       - redis
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
-      - ./xhgui:/var/www/xhgui:delegated
-      - ./composer:/home/sammy/.composer
+      # - ./xhgui:/var/www/xhgui:delegated
+
+  #
+  # Composer
+  #
+  composer:
+    image: composer:latest
+    volumes:
+      - ${APP_CODE}:/app
+      - ./composer:/tmp      
 
   #
   # Nginx контейнер, собирается напрямую из образа
@@ -63,7 +71,6 @@ services:
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
       - ./worker/supervisord.d:/etc/supervisord.d
-      - ./worker/log:/var/log/supervisor/:cached
     depends_on:
       - redis
 

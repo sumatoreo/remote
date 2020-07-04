@@ -7,9 +7,6 @@
 # Composer
 /composer
 
-# Worker
-/worker/log
-
 # Redis
 /redis
 
