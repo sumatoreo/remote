@@ -67,6 +67,10 @@ RUN docker-php-ext-install pdo pdo_mysql soap; \
     pecl install sqlsrv pdo_sqlsrv; \
     docker-php-ext-enable sqlsrv pdo_sqlsrv
 
+# Exif
+RUN docker-php-ext-install exif; \
+    docker-php-ext-enable exif
+
 RUN mkdir -p /var/www/html; \
     mkdir -p /var/log/supervisor
 

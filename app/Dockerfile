@@ -73,6 +73,10 @@ RUN docker-php-ext-install tokenizer
 # OpCache
 RUN docker-php-ext-install opcache
 
+# Exif
+RUN docker-php-ext-install exif; \
+    docker-php-ext-enable exif
+
 # xDebug
 # RUN pecl install xdebug; \
 #     docker-php-ext-enable xdebug
