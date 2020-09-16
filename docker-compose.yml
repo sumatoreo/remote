@@ -16,20 +16,11 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     depends_on:
-      - mongo
+      # - mongo
       - redis
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
-      # - ./xhgui:/var/www/xhgui:delegated
-
-  #
-  # Composer
-  #
-  composer:
-    image: composer:latest
-    volumes:
-      - ${APP_CODE}:/app
-      - ./data/composer:/tmp      
+      # - ./xhgui:/var/www/xhgui:delegated   
 
   #
   # Nginx контейнер, собирается напрямую из образа
@@ -57,14 +48,14 @@ services:
   #
   # MongoDB
   #
-  mongo:
-    image: mongo
-    restart: unless-stopped
-    volumes:
-      - ./data/mongo:/data/db:delegated
-    environment:
-      MONGO_INITDB_DATABASE: xhprof
-    command: --storageEngine=wiredTiger
+  # mongo:
+  #   image: mongo
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./data/mongo:/data/db:delegated
+  #   environment:
+  #     MONGO_INITDB_DATABASE: xhprof
+  #   command: --storageEngine=wiredTiger
 
   #
   # Supervisor Worker
