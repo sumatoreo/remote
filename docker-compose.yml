@@ -20,7 +20,6 @@ services:
       - redis
     volumes:
       - ${APP_CODE}:/var/www/html:delegated
-      # - ./xhgui:/var/www/xhgui:delegated   
 
   #
   # Nginx контейнер, собирается напрямую из образа
@@ -46,27 +45,16 @@ services:
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''  
 
   #
-  # MongoDB
-  #
-  # mongo:
-  #   image: mongo
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./data/mongo:/data/db:delegated
-  #   environment:
-  #     MONGO_INITDB_DATABASE: xhprof
-  #   command: --storageEngine=wiredTiger
-
-  #
   # Supervisor Worker
   #
-  worker:
-    build: ./worker
-    volumes:
-      - ${APP_CODE}:/var/www/html:delegated
-      - ./worker/supervisord.d:/etc/supervisord.d
-    depends_on:
-      - redis
+  # worker:
+  #   build: ./worker
+  #   volumes:
+  #     - ${APP_CODE}:/var/www/html:delegated
+  #     - ./worker/supervisord.d:/etc/supervisord.d
+  #   depends_on:
+  #     - redis
+  #     - rabbit
 
   #
   # Redis
@@ -78,6 +66,20 @@ services:
       - ./data/redis:/data
     ports:
       - 6379:6379
+
+  rabbit:
+    image: rabbitmq
+    hostname: my-rabbit
+    restart: unless-stopped
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./log/rabbitmq:/var/log/rabbitmq/log
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - 15672:15672
+      - 5672:5672
 
 networks:
   default:

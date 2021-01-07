@@ -1,9 +1,9 @@
-# Code
-/mobile-backend2020
-/Backend
-
 # Common
 .DS_Store
 .env
 /data
 /log
+
+# Nginx
+/nginx/ssl/private/nginx-selfsigned.key
+/nginx/ssl/certs/nginx-selfsigned.crt

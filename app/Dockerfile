@@ -17,7 +17,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
-	apt-get upgrade; \
+	apt-get upgrade -y; \
 	apt-get install -y \
 		apt \
 		libz-dev \
@@ -180,32 +180,12 @@ RUN set -eux; \
 	pecl install pecl_http; \
 	docker-php-ext-enable http
 
+# Sockets
+RUN docker-php-ext-install sockets
+
 # Composer
 RUN set -eux; \
 	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# xDebug
-# RUN pecl install xdebug; \
-#     docker-php-ext-enable xdebug
-
-# Xhprof
-# RUN curl -L -o /tmp/xhprof.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v5.0.1.tar.gz"; \
-#     mkdir -p xhprof; \
-#     tar -C xhprof -zxvf /tmp/xhprof.tar.gz --strip 1; \
-#     ( \
-#         cd xhprof \
-#         && phpize \
-#         && ./configure \
-#         && make \
-#         && make install \
-#     ); \
-#     rm -r xhprof; \
-#     rm /tmp/xhprof.tar.gz
-
-# MongoDB
-# RUN set -eux; \
-# 	pecl install mongodb; \
-#     docker-php-ext-enable mongodb
 
 WORKDIR /var/www/html
 

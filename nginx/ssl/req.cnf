@@ -1,18 +1,21 @@
 [req]
-distinguished_name = req_distinguished_name
-x509_extensions = v3_req
-prompt = no
+distinguished_name 	= req_distinguished_name
+x509_extensions 	= v3_req
+prompt 				= no
+
 [req_distinguished_name]
-C = RU
-ST = MS
-L = Moscow
-O = VkusVill
-OU = IT
-CN = https://mobile.app
+C 					= RU
+ST 					= MS
+L 					= Moscow
+O 					= VkusVill
+OU 					= IT
+CN 					= https://mobile.app
+
 [v3_req]
-keyUsage = critical, digitalSignature, keyAgreement
-extendedKeyUsage = serverAuth
-subjectAltName = @alt_names
+keyUsage 			= critical, digitalSignature, keyAgreement
+extendedKeyUsage 	= serverAuth
+subjectAltName 		= @alt_names
+
 [alt_names]
-DNS.1 = www.mobile.app
-DNS.2 = mobile.app
+DNS.1 				= www.mobile.app
+DNS.2 				= mobile.app

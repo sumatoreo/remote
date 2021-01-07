@@ -17,7 +17,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
-	apt-get upgrade; \
+	apt-get upgrade -y; \
 	apt-get install -y \
 		apt \
 		libz-dev \
@@ -179,6 +179,9 @@ RUN set -eux; \
 	docker-php-ext-enable raphf propro; \
 	pecl install pecl_http; \
 	docker-php-ext-enable http
+
+# Sockets
+RUN docker-php-ext-install sockets
 
 # Supervisor
 RUN set -eux; \
