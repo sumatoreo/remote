@@ -5,5 +5,5 @@
 /log
 
 # Nginx
-/nginx/ssl/private/nginx-selfsigned.key
-/nginx/ssl/certs/nginx-selfsigned.crt
+nginx/ssl/private
+nginx/ssl/certs
