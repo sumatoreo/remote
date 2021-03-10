@@ -1,4 +1,4 @@
-FROM php:7.4-cli-buster
+FROM php:7.4-fpm-buster
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
@@ -50,28 +50,25 @@ RUN set -eux; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
 	apt-get install -y curl libcurl4-gnutls-dev; \
-	rm -rf /var/lib/apt/lists/*
+	rm -rf /var/lib/apt/lists/*; \
+	wget -P /etc/ssl/certs https://curl.haxx.se/ca/cacert.pem; \
+	sed -i '/;curl.cainfo =/curl.cainfo = /etc/ssl/certs/cacert.pem' /usr/local/etc/php/php.ini
 
 # Microsoft SQL
+# https://github.com/microsoft/msphpsql
 RUN set -eux; \
+	curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -; \
+	# Debian Buster
+	curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
 	apt-get install -y apt-transport-https gnupg; \
-	curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -; \
-	curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list; \
-	apt-get update -yqq; \
-	# Install Dependenci;es
-	ACCEPT_EULA=Y apt-get install -y unixodbc unixodbc-dev libgss3 odbcinst msodbcsql17 locales; \
+	# optional: for bcp and sqlcmd
+	# optional: for unixODBC development headers
+	ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools unixodbc-dev; \
 	rm -rf /var/lib/apt/lists/*; \
-	echo "en_US.UTF-8 UTF-8" > /etc/locale.gen; \
-	# link local alias;es
-	ln -sfn /etc/locale.alias /usr/share/locale/locale.alias; \
-	locale-gen; \
-	# Install pdo_sqlsrv and sqlsrv from PECL. Replace pdo_sqlsrv-4.1.8preview with preferred versio;n.
-	pecl install pdo_sqlsrv sqlsrv; \
-	docker-php-ext-enable pdo_sqlsrv sqlsrv; \
-	php -m | grep -q 'pdo_sqlsrv'; \
-	php -m | grep -q 'sqlsrv'
+	pecl install sqlsrv pdo_sqlsrv; \
+	docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 # GD
 RUN set -eux; \
@@ -175,9 +172,13 @@ RUN set -eux; \
 
 # Ext HTTP install
 RUN set -eux; \
+	apt-get clean; \
+	apt-get update --fix-missing; \
+	apt-get install -y libgnutls28-dev; \
+	rm -rf /var/lib/apt/lists/*; \
 	pecl install raphf propro; \
 	docker-php-ext-enable raphf propro; \
-	pecl install pecl_http; \
+	pecl install pecl_http-3.2.2; \
 	docker-php-ext-enable http
 
 # Sockets
@@ -191,7 +192,6 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*; \
 	mkdir -p /var/www/html; \
     mkdir -p /var/log/supervisor
-
 
 #
 #--------------------------------------------------------------------------
