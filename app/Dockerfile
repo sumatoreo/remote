@@ -114,11 +114,9 @@ RUN set -eux; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
 	apt-get install -y \
-		imagemagick \
+		# imagemagick \
 		libmagickwand-dev; \
 	rm -rf /var/lib/apt/lists/*; \
-	pecl install imagick; \
-    docker-php-ext-enable imagick; \
     cd ~; \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz; \
 	tar xvzf ImageMagick.tar.gz; \
@@ -127,7 +125,9 @@ RUN set -eux; \
 	make; \
 	make install; \
 	ldconfig /usr/local/lib; \
-	rm -rf ImageMagick*
+	rm -rf ImageMagick*; \
+	pecl install imagick; \
+	docker-php-ext-enable imagick
 
 # XML
 RUN set -eux; \
