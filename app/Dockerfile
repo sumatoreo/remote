@@ -114,7 +114,6 @@ RUN set -eux; \
 	apt-get clean; \
 	apt-get update --fix-missing; \
 	apt-get install -y \
-		# imagemagick \
 		libmagickwand-dev; \
 	rm -rf /var/lib/apt/lists/*; \
     cd ~; \
